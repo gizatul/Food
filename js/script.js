@@ -153,12 +153,13 @@ const btnContact = document.querySelectorAll('[data-modal]'),
     
 //4. Создание класса для карточек меню
 class MenuCard {
-    constructor (src, alt, title, descr, price, parentSelector) { 
+    constructor (src, alt, title, descr, price, parentSelector, ...classes) {//classes- rest-оператор, т.к неизвестно сколько классов в будущем мб добавлено (вместо .menu__item) 
         this.src = src; //ссылку на картинку
         this.alt = alt; //alt картинки
         this.title = title; //тайтл
         this.descr = descr; // описание
         this.price = price; //цена в гривнах
+        this.classes = classes; //классы, вместо menu_item - будет массив
         this.parent = document.querySelector(parentSelector); //вытаскивание родителя элемента
         this.transfer = 36.77; // для конвертации доллара в гривны
         this.changeToUAH(); // вызов ф-ии для получения актуального price
@@ -168,8 +169,13 @@ class MenuCard {
     }
     render() { // ф-я добавления на страницу
         const elementMenu = document.createElement('div'); //создание элемента с тегом div
+        if (this.classes.length == 0) { //создаем условие для значения по умолчанию, если длина массива 0(т.е массив пустой, то добавляем .menu__item)
+            this.classes = 'menu__item';
+            elementMenu.classList.add(this.classes);
+        } else {
+            this.classes.forEach(className => elementMenu.classList.add(className));
+        }//перебор массива, к elementMenu добавляем полученные класссы ч/з add
         elementMenu.innerHTML = ` 
-        <div class="menu__item">
             <img src=${this.src} alt=${this.alt}>
             <h3 class="menu__item-subtitle">${this.title}</h3>
             <div class="menu__item-descr">${this.descr}</div>
@@ -177,8 +183,7 @@ class MenuCard {
             <div class="menu__item-price">
                 <div class="menu__item-cost">Цена:</div>
                 <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-            </div>
-        </div>`; //добавляемый код
+            </div>`//добавляемый код
         this.parent.append(elementMenu); //добавление ElementMenu в конец родителя parent
     }    
 }
@@ -188,7 +193,8 @@ new MenuCard( // добавление карточек в меню
     'Меню "Фреш"',
     'Меню "Фреш" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
     '10',
-    '.menu .container'
+    '.menu .container',
+    // не добавляем классы карточки, должно по умолчанию добавиться .menu__item
 ).render(); //не забываем добавить метод render
 
 new MenuCard(
@@ -197,7 +203,8 @@ new MenuCard(
     'Меню "Пальма"',
     'Меню "Пальма" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
     '15',
-    '.menu .container'
+    '.menu .container',
+    'menu__item'
 ).render(); 
 
 new MenuCard(
@@ -206,7 +213,8 @@ new MenuCard(
     'Меню "Диетическое"',
     'Меню "Диетическое" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
     '20',
-    '.menu .container'
+    '.menu .container',
+    'menu__item'
 ).render(); 
       
 
