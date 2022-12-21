@@ -151,7 +151,63 @@ const btnContact = document.querySelectorAll('[data-modal]'),
     }
     window.addEventListener('scroll', showModalByScroll); //{once:true} здесь не подходит, т.к. каждый скролл отменяет действие. Подходит для кликов
     
-//4.
+//4. Создание класса для карточек меню
+class MenuCard {
+    constructor (src, alt, title, descr, price, parentSelector) { 
+        this.src = src; //ссылку на картинку
+        this.alt = alt; //alt картинки
+        this.title = title; //тайтл
+        this.descr = descr; // описание
+        this.price = price; //цена в гривнах
+        this.parent = document.querySelector(parentSelector); //вытаскивание родителя элемента
+        this.transfer = 36.77; // для конвертации доллара в гривны
+        this.changeToUAH(); // вызов ф-ии для получения актуального price
+    }
+    changeToUAH() { // ф-я конвертации
+        this.price = +Math.floor(this.price * this.transfer);
+    }
+    render() { // ф-я добавления на страницу
+        const elementMenu = document.createElement('div'); //создание элемента с тегом div
+        elementMenu.innerHTML = ` 
+        <div class="menu__item">
+            <img src=${this.src} alt=${this.alt}>
+            <h3 class="menu__item-subtitle">${this.title}</h3>
+            <div class="menu__item-descr">${this.descr}</div>
+            <div class="menu__item-divider"></div>
+            <div class="menu__item-price">
+                <div class="menu__item-cost">Цена:</div>
+                <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+            </div>
+        </div>`; //добавляемый код
+        this.parent.append(elementMenu); //добавление ElementMenu в конец родителя parent
+    }    
+}
+new MenuCard( // добавление карточек в меню
+    "img/tabs/vegy.jpg",
+    "fresh",
+    'Меню "Фреш"',
+    'Меню "Фреш" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    '10',
+    '.menu .container'
+).render(); //не забываем добавить метод render
+
+new MenuCard(
+    "img/tabs/elite.jpg",
+    "elite",
+    'Меню "Пальма"',
+    'Меню "Пальма" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    '15',
+    '.menu .container'
+).render(); 
+
+new MenuCard(
+    "img/tabs/post.jpg",
+    "post",
+    'Меню "Диетическое"',
+    'Меню "Диетическое" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    '20',
+    '.menu .container'
+).render(); 
       
 
 
@@ -160,6 +216,3 @@ const btnContact = document.querySelectorAll('[data-modal]'),
 
 
 });
-
-
-
